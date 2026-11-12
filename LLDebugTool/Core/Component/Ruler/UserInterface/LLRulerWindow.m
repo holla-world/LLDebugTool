@@ -30,11 +30,22 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        if (!self.rootViewController) {
-            self.rootViewController = [[LLRulerViewController alloc] init];
-        }
+        [self commonInit];
     }
     return self;
+}
+
+- (instancetype)initWithWindowScene:(UIWindowScene *)windowScene API_AVAILABLE(ios(13.0)) {
+    if (self = [super initWithWindowScene:windowScene]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit {
+    if (!self.rootViewController) {
+        self.rootViewController = [[LLRulerViewController alloc] init];
+    }
 }
 
 - (void)componentDidFinish {

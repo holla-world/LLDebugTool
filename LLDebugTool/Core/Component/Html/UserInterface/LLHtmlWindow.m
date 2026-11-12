@@ -33,15 +33,26 @@
 #pragma mark - Life cycle
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.showAnimateStyle = LLBaseWindowShowAnimateStylePresent;
-        self.hideAnimateStyle = LLBaseWindowHideAnimateStyleDismiss;
-        if (!self.rootViewController) {
-            LLHtmlConfigViewController *vc = [[LLHtmlConfigViewController alloc] init];
-            LLNavigationController *nav = [[LLNavigationController alloc] initWithRootViewController:vc];
-            self.rootViewController = nav;
-        }
+        [self commonInit];
     }
     return self;
+}
+
+- (instancetype)initWithWindowScene:(UIWindowScene *)windowScene API_AVAILABLE(ios(13.0)) {
+    if (self = [super initWithWindowScene:windowScene]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit {
+    self.showAnimateStyle = LLBaseWindowShowAnimateStylePresent;
+    self.hideAnimateStyle = LLBaseWindowHideAnimateStyleDismiss;
+    if (!self.rootViewController) {
+        LLHtmlConfigViewController *vc = [[LLHtmlConfigViewController alloc] init];
+        LLNavigationController *nav = [[LLNavigationController alloc] initWithRootViewController:vc];
+        self.rootViewController = nav;
+    }
 }
 
 #pragma mark - Over write

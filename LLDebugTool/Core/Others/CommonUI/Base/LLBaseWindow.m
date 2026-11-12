@@ -31,17 +31,47 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.windowLevel = UIWindowLevelStatusBar - 200;
-        self.layer.masksToBounds = YES;
-#ifdef __IPHONE_13_0
-        if (@available(iOS 13.0, *)) {
-            self.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
-        }
-#endif
+        [self commonInit];
     }
     return self;
 }
 
+- (instancetype)initWithWindowScene:(UIWindowScene *)windowScene API_AVAILABLE(ios(13.0)) {
+    if (self = [super initWithWindowScene:windowScene]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit {
+    self.windowLevel = UIWindowLevelStatusBar - 200;
+    self.layer.masksToBounds = YES;
+#ifdef __IPHONE_13_0
+    if (@available(iOS 13.0, *)) {
+        self.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+    }
+#endif
+}
+
++ (UIWindowScene *)ll_activeWindowScene API_AVAILABLE(ios(13.0)) {
+    NSArray<UIScene *> *scenes = UIApplication.sharedApplication.connectedScenes.allObjects;
+    for (UIScene *scene in scenes) {
+        if ([scene isKindOfClass:[UIWindowScene class]]) {
+            UIWindowScene *windowScene = (UIWindowScene *)scene;
+            if (windowScene.activationState == UISceneActivationStateForegroundActive ||
+                windowScene.activationState == UISceneActivationStateForegroundInactive) {
+                return windowScene;
+            }
+        }
+    }
+    for (UIScene *scene in scenes) {
+        if ([scene isKindOfClass:[UIWindowScene class]]) {
+            UIWindowScene *windowScene = (UIWindowScene *)scene;
+            return windowScene;
+        }
+    }
+    return nil;
+}
 
 - (void)becomeVisiable {
     UIViewController *vc = self.rootViewController;

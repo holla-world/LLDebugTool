@@ -57,26 +57,35 @@ typedef NS_ENUM(NSUInteger, LLEntryWindowDirection) {
 #pragma mark - Over write
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor clearColor];
-        if (!self.rootViewController) {
-            LLEntryViewController *viewController = [[LLEntryViewController alloc] init];
-            viewController.delegate = self;
-            self.rootViewController = viewController;
-        }
-        
-        self.statusBarClickable = [LLTool statusBarClickable];
-        
-        // Double tap, to screenshot.
-        UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapGR:)];
-        doubleTap.numberOfTapsRequired = 2;
-        
-        // Tap, to show tool view.
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGR:)];
-        [tap requireGestureRecognizerToFail:doubleTap];
-        [self addGestureRecognizer:tap];
-        [self addGestureRecognizer:doubleTap];
+        [self commonInit];
     }
     return self;
+}
+
+- (instancetype)initWithWindowScene:(UIWindowScene *)windowScene API_AVAILABLE(ios(13.0)) {
+    if (self = [super initWithWindowScene:windowScene]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit {
+    self.backgroundColor = [UIColor clearColor];
+    if (!self.rootViewController) {
+        LLEntryViewController *viewController = [[LLEntryViewController alloc] init];
+        viewController.delegate = self;
+        self.rootViewController = viewController;
+    }
+
+    self.statusBarClickable = [LLTool statusBarClickable];
+
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapGR:)];
+    doubleTap.numberOfTapsRequired = 2;
+
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGR:)];
+    [tap requireGestureRecognizerToFail:doubleTap];
+    [self addGestureRecognizer:tap];
+    [self addGestureRecognizer:doubleTap];
 }
 
 - (BOOL)LL_canBecomeKeyWindow {

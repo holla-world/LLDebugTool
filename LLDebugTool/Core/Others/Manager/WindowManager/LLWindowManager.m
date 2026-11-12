@@ -276,13 +276,23 @@ static LLWindowManager *_instance = nil;
     __block LLBaseWindow *window = nil;
     if (![[NSThread currentThread] isMainThread]) {
         dispatch_sync(dispatch_get_main_queue(), ^{
-           window = [[cls alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            window = [self createWindowWithClass:cls];
         });
     } else {
-        window = [[cls alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        window = [self createWindowWithClass:cls];
     }
     NSAssert([window isKindOfClass:[LLBaseWindow class]], ([NSString stringWithFormat:@"%@ isn't a LLBaseWindow class",className]));
     return window;
+}
+
++ (LLBaseWindow *)createWindowWithClass:(Class)cls {
+    if (@available(iOS 13.0, *)) {
+        UIWindowScene *windowScene = [LLBaseWindow ll_activeWindowScene];
+        if (windowScene) {
+            return [[cls alloc] initWithWindowScene:windowScene];
+        }
+    }
+    return [[cls alloc] initWithFrame:[UIScreen mainScreen].bounds];
 }
 
 @end

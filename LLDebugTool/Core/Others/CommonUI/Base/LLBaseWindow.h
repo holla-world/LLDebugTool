@@ -49,6 +49,9 @@ typedef NS_ENUM(NSUInteger, LLBaseWindowHideAnimateStyle) {
 /// Become visiable method.
 - (void)becomeVisiable;
 
+/// Get active window scene for iOS 13+
++ (nullable UIWindowScene *)ll_activeWindowScene;
+
 @end
 
 NS_ASSUME_NONNULL_END

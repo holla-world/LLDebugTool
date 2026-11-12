@@ -39,14 +39,25 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _moveable = YES;
-        _moveableRect = CGRectNull;
-        // Pan, to moveable.
-        self.panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panGR:)];
-        
-        [self addGestureRecognizer:self.panGestureRecognizer];
+        [self commonInit];
     }
     return self;
+}
+
+- (instancetype)initWithWindowScene:(UIWindowScene *)windowScene API_AVAILABLE(ios(13.0)) {
+    if (self = [super initWithWindowScene:windowScene]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit {
+    _moveable = YES;
+    _moveableRect = CGRectNull;
+    // Pan, to moveable.
+    self.panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panGR:)];
+
+    [self addGestureRecognizer:self.panGestureRecognizer];
 }
 
 - (void)panGR:(UIPanGestureRecognizer *)sender {
